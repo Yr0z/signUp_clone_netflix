@@ -8,7 +8,7 @@
 </head>
 <body>
 
-	<?php include('src/header.php'); ?>
+	<?php require_once('src/header.php'); ?>
 	
 	<section>
 		<div id="login-body">
@@ -47,6 +47,6 @@
 		</div>
 	</section>
 
-	<?php include('src/footer.php'); ?>
+	<?php require_once('src/footer.php'); ?>
 </body>
 </html>
