@@ -34,12 +34,12 @@
 
 		// L'adresse email est-elle en doublon ?
 
-		$requete = $bdd->prepare('SELECT COUNT(*) as Emailnumber FROM user WHERE email = ?');
+		$requete = $bdd->prepare('SELECT COUNT(*) as emailNumber FROM user WHERE email = ?');
 		$requete->execute([$email]);
 
 		while($emailVerification = $requete->fetch()) {
 
-			if($emailVerification['Emailnumber'] != 0) {
+			if($emailVerification['emailNumber'] != 0) {
 				header('location: inscription.php?error=1&message=Cette adresse email est déjà utilisée par un autre utilisateur.');
 				exit();
 			}

@@ -1,3 +1,42 @@
+<?php
+
+	session_start();
+
+	// Détection de l'envoi du formulaire
+
+	if(!empty($_POST['email']) && !empty($_POST['password'])) {
+
+
+		require_once('src/connection.php');
+
+		$email = htmlspecialchars($_POST['email']);
+		$password = htmlspecialchars($_POST['password']);
+
+		if(!filter_var($email, FILTER_VALIDATE_EMAIL )) {
+
+			header('location: index.php?error=1&message=Votre adresse email est invalide.');
+			exit();
+
+		}
+
+		$password = "aq1".sha1($password."123")."25";
+
+		$req = $bdd->prepare('SELECT COUNT(*) AS emailUser FROM user WHERE email = ?');
+		$req->execute([$email]);
+
+		while($emailVerif = $req->fetch()) {
+
+			if($emailVerif['emailUser'] != 1) {
+				header('location: index.php?error=1&message=Cette adresse email utilisateur n\'exhiste pas');
+				exit();
+			}
+		}
+
+	};
+
+?>
+
+
 <!DOCTYPE html>
 <html>
 <head>
