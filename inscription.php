@@ -1,5 +1,4 @@
 <?php
-
 	session_start();
 
 	require_once('src/option.php');
@@ -48,8 +47,10 @@
 		while($emailVerification = $requete->fetch()) {
 
 			if($emailVerification['emailNumber'] != 0) {
+
 				header('location: inscription.php?error=1&message=Cette adresse email est déjà utilisée par un autre utilisateur.');
 				exit();
+
 			}
 
 		} 	
@@ -72,8 +73,7 @@
 		exit();
 
 	};
-
-
+	
 ?>
 
 <!DOCTYPE html>

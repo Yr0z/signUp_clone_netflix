@@ -1,5 +1,4 @@
 <?php
-
 	session_start();
 
 	require_once('src/option.php');
@@ -8,7 +7,7 @@
 
 	if(!empty($_POST['email']) && !empty($_POST['password'])) {
 
-		// COnnection à la BDD
+		// Connection à la BDD
 
 		require_once('src/connection.php');
 
@@ -38,8 +37,10 @@
 		while($emailVerif = $req->fetch()) {
 
 			if($emailVerif['emailUser'] != 1) {
+
 				header('location: index.php?error=1&message=Impossible de vous authentifier correctement.');
 				exit();
+
 			}
 
 		}
@@ -77,7 +78,6 @@
 	};
 
 ?>
-
 
 <!DOCTYPE html>
 <html>
