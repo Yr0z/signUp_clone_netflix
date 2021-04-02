@@ -2,24 +2,33 @@
 
 	session_start();
 
-	// Détection de l'envoi du formulaire
+	// Verification de l'envoi du formulaire
 
 	if(!empty($_POST['email']) && !empty($_POST['password'])) {
 
+		// COnnection à la BDD
 
 		require_once('src/connection.php');
 
-		$email = htmlspecialchars($_POST['email']);
-		$password = htmlspecialchars($_POST['password']);
+		// Variables
 
-		if(!filter_var($email, FILTER_VALIDATE_EMAIL )) {
+		$email 		= htmlspecialchars($_POST['email']);
+		$password 	= htmlspecialchars($_POST['password']);
+
+		// L'adresse email est-elle valide ?
+
+		if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
 			header('location: index.php?error=1&message=Votre adresse email est invalide.');
 			exit();
 
 		}
 
+		// Chiffrement du mot de passe
+
 		$password = "aq1".sha1($password."123")."25";
+
+		// L'adresse email est-elle bien utilisée ?
 
 		$req = $bdd->prepare('SELECT COUNT(*) AS emailUser FROM user WHERE email = ?');
 		$req->execute([$email]);
@@ -27,11 +36,36 @@
 		while($emailVerif = $req->fetch()) {
 
 			if($emailVerif['emailUser'] != 1) {
-				header('location: index.php?error=1&message=Cette adresse email utilisateur n\'exhiste pas');
+				header('location: index.php?error=1&message=Impossible de vous authentifier correctement.');
 				exit();
 			}
+
 		}
 
+		// Connecter l'utilisateur
+
+		$req = $bdd->prepare('SELECT * FROM user WHERE email = ?');
+		$req->execute([$email]);
+
+		while($user = $req->fetch()) {
+
+			if($user['password'] == $password && $user['email'] == $email) {
+
+				$_SESSION['connect'] 	= 1;
+				$_SESSION['email']		= $user['email'];
+
+				header('location: index.php?success=1');
+				exit();
+
+			} else {
+
+				header('location: index.php?error=1&message=Impossible de vous authentifier correctement.');
+				exit();
+
+			}
+
+		}
+		
 	};
 
 ?>
